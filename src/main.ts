@@ -8,7 +8,14 @@ async function bootstrap() {
   // Prefijo que se antepone a cada ruta de forma global
   app.setGlobalPrefix('api/v2')
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+    transformOptions: {
+      enableImplicitConversion: true
+    }
+  }))
 
   await app.listen(3000);
 }
