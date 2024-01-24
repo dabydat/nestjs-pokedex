@@ -4,12 +4,14 @@ import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { PaginationDto } from 'src/common/dtos/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
   constructor(
     @InjectModel(Pokemon.name)
-    readonly pokemonModel: Model<Pokemon>
+    readonly pokemonModel: Model<Pokemon>,
+    private readonly configService: ConfigService
   ) { }
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase();
@@ -24,7 +26,7 @@ export class PokemonService {
 
   findAll(paginationDto: PaginationDto) {
     const { limit = 10, offset = 0 } = paginationDto;
-    return this.pokemonModel.find().limit(limit).skip(offset).sort({no:1}).select('-__v');
+    return this.pokemonModel.find().limit(limit).skip(offset).sort({ no: 1 }).select('-__v');
   }
 
   async findOne(term: string) {
